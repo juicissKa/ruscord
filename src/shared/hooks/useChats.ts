@@ -16,7 +16,7 @@ export const useChats = () => {
     if (isSuccess) {
       dispatch(setChats(data));
     }
-  }, [data, dispatch]);
+  }, [data, isSuccess]);
 
   return { isLoading, isFetching };
 };

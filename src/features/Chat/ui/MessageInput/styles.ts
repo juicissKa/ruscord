@@ -2,6 +2,7 @@ import { SxProps, Theme } from "@mui/material";
 
 export const styles: Record<string, SxProps<Theme>> = {
   textField: {
+    width: "100%",
     bgcolor: "grey.900",
     borderRadius: 4,
     "& .MuiOutlinedInput-root": {
@@ -16,4 +17,5 @@ export const styles: Record<string, SxProps<Theme>> = {
       },
     },
   },
+  wrapper: { width: "100%" },
 };

@@ -8,6 +8,7 @@ export const useMessages = () => {
   const dispatch = useAppDispatch();
 
   const { chatId } = useAppSelector((state) => state.chat);
+  const { socketMessages } = useAppSelector((state) => state.socket);
 
   const { page, size } = usePagination();
 
@@ -19,9 +20,14 @@ export const useMessages = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setMessages(data));
+      dispatch(
+        setMessages([
+          ...data,
+          ...socketMessages.filter((message) => message.chatId === chatId),
+        ])
+      );
     }
-  }, [data]);
+  }, [data, isSuccess, socketMessages, chatId]);
 
   return { isLoading, isFetching };
 };

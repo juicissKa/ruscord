@@ -18,7 +18,6 @@ import {
 import { logout } from "shared/slices/authSlice/services/authSlice";
 import axios from "axios";
 import { IMessage } from "entities/MessageItem/types/types";
-import { addMessage } from "shared/slices/chatSlice/services/chatSlice";
 
 enum ConnectError {
   AuthError = "AUTH_ERROR",
@@ -84,12 +83,10 @@ export const socketMiddleware: Middleware = (store) => {
           });
 
           socket.socket.on(SocketEvent.ReceiveMessage, (message: IMessage) => {
-            store.dispatch(receiveMessage(message));
+            const { fetchedChats } = store.getState().chat;
 
-            const { chatId } = store.getState().chat;
-
-            if (message.chatId === chatId) {
-              store.dispatch(addMessage(message));
+            if (fetchedChats.includes(message.chatId)) {
+              store.dispatch(receiveMessage(message));
             }
           });
 

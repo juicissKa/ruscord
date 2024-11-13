@@ -16,7 +16,7 @@ export const useUsers = () => {
     if (isSuccess) {
       dispatch(setUsers(data));
     }
-  }, [data, dispatch]);
+  }, [data, isSuccess]);
 
   return { isLoading, isFetching };
 };

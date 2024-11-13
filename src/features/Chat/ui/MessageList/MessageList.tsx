@@ -1,14 +1,24 @@
 import { List } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { styles } from "./styles";
 import { IMessage } from "entities/MessageItem/types/types";
 import { MessageItem } from "entities/MessageItem";
 import { useAppSelector } from "app/store/store";
 import { useMessages } from "shared/hooks/useMessages";
-import { MessageListSkeleton } from "../Skeleton/MessageListSkeleton";
+import "./anchorStyles.css";
 
-export const MessageList = () => {
-  const { isFetching } = useMessages();
+interface MessageListProps {
+  getListRef: (ref: HTMLUListElement | null) => void;
+  scrollToBottom: () => void;
+}
+
+export const MessageList: React.FC<MessageListProps> = ({
+  getListRef,
+  scrollToBottom,
+}) => {
+  useMessages();
+
+  const firstRender = useRef(true);
 
   const { messages } = useAppSelector((state) => state.chat);
 
@@ -23,13 +33,25 @@ export const MessageList = () => {
     []
   );
 
-  return isFetching ? (
-    <MessageListSkeleton />
-  ) : (
-    <List sx={styles.list}>
+  useEffect(() => {
+    if (messages.length && firstRender) {
+      scrollToBottom();
+      firstRender.current = false;
+    }
+  }, [messages]);
+
+  return (
+    <List
+      id={"scroller"}
+      sx={styles.list}
+      ref={(ref) => {
+        getListRef(ref);
+      }}
+    >
       {formattedMessages.map((message) => (
         <MessageItem key={message.id} data={message} avatar={message.avatar} />
       ))}
+      <div id="anchor"></div>
     </List>
   );
 };
