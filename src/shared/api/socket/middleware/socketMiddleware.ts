@@ -18,6 +18,8 @@ import {
 import { logout } from "shared/slices/authSlice/services/authSlice";
 import axios from "axios";
 import { IMessage } from "entities/MessageItem/types/types";
+import { setChannelId } from "shared/slices/channelSlice/services/channelSlice";
+import { IProfile } from "shared/slices/authSlice/types/types";
 
 enum ConnectError {
   AuthError = "AUTH_ERROR",
@@ -48,8 +50,9 @@ export const socketMiddleware: Middleware = (store) => {
 
           socket.socket.on(SocketEvent.Connect, () => {});
 
-          socket.socket.on(SocketEvent.ConnectionProps, (profile) => {
+          socket.socket.on(SocketEvent.ConnectionProps, (profile: IProfile) => {
             store.dispatch(connectionEstablished(profile));
+            store.dispatch(setChannelId(profile.channels[0]?.id || null));
           });
 
           socket.socket.on(SocketEvent.Error, (message) => {

@@ -21,7 +21,7 @@ const mutex = new Mutex();
 
 const baseQuery = (args: FetchArgs, api: BaseQueryApi, extraOptions: any) => {
   return fetchBaseQuery({
-    baseUrl: "http://localhost:3001",
+    baseUrl: "http://localhost:3001/",
     prepareHeaders: (headers, { getState }) => {
       const { token } = (getState() as RootState).auth;
       if (token) {
@@ -40,14 +40,6 @@ const baseQueryWithReAuth: BaseQueryFnExtended = async (
   await mutex.waitForUnlock();
 
   let result = await baseQuery(args, api, extraOptions);
-
-  if (result?.meta?.response?.status !== 200) {
-    result = await baseQuery(
-      args,
-      api,
-      (extraOptions = { ...extraOptions, onlyLocalPriority: true })
-    );
-  }
 
   if (result.error && result.error.status === HTTP_STATUS_UNAUTHORIZED) {
     if (!mutex.isLocked()) {
@@ -90,4 +82,5 @@ export const commonApi = createApi({
   reducerPath: "commonApi",
   baseQuery: baseQueryWithReAuth,
   endpoints: () => ({}),
+  tagTypes: ["Channel", "User", "Chat"],
 });

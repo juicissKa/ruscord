@@ -35,13 +35,19 @@ export const LoginPage = () => {
       login({ email, password: sha256(password) })
         .unwrap()
         .catch((err) => {
-          setErrorMessage(err.data.message);
+          setErrorMessage(
+            err?.data?.message ? err.data.message : "Не удалось войти!"
+          );
         });
     } else {
       register({ email, username, password: sha256(password) })
         .unwrap()
         .catch((err) => {
-          setErrorMessage(err.data.message);
+          setErrorMessage(
+            err?.data?.message
+              ? err.data.message
+              : "Не удалось зарегистрироваться!"
+          );
         });
     }
   };

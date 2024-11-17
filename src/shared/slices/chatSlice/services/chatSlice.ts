@@ -1,18 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IMessage } from "entities/MessageItem/types/types";
 import { IUser } from "entities/UserItem/types/types";
-import { uniq } from "lodash";
-import { chatService } from "shared/api/services/common/chat";
 
 interface ChatState {
-  chatId: number;
+  chatId: number | null;
   fetchedChats: number[];
   messages: IMessage[];
   users: IUser[];
 }
 
 const initialState: ChatState = {
-  chatId: 5,
+  chatId: null,
   fetchedChats: [5],
   messages: [],
   users: [],
@@ -22,7 +20,7 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setChatId(state, { payload }: PayloadAction<number>) {
+    setChatId(state, { payload }: PayloadAction<number | null>) {
       state.chatId = payload;
     },
     setMessages(state, { payload }: PayloadAction<IMessage[]>) {
@@ -34,17 +32,6 @@ export const chatSlice = createSlice({
     setUsers(state, { payload }: PayloadAction<IUser[]>) {
       state.users = payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      chatService.endpoints.getMessages.matchFulfilled,
-      (state, { meta }) => {
-        state.fetchedChats = uniq([
-          ...state.fetchedChats,
-          meta.arg.originalArgs.chatId,
-        ]);
-      }
-    );
   },
 });
 

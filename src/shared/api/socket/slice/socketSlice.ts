@@ -15,16 +15,14 @@ const initialState: SocketState = {
   socketMessages: [],
 };
 
-// Now create the slice
 export const socketSlice = createSlice({
   name: "socket",
   initialState,
-  // Reducers: Functions we can call on the store
   reducers: {
     initSocket: () => {
       return;
     },
-    connectionEstablished: (state, { payload }) => {
+    connectionEstablished: (state, { payload }: PayloadAction<IProfile>) => {
       state.isConnected = true;
       state.profile = payload;
     },

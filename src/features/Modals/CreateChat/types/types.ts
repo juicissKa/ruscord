@@ -1,7 +1,6 @@
 import { ChatType } from "shared/constants/chats";
 
-export interface IChat {
-  id: number;
+export interface ICreateChatModalForm {
   name: string;
   type: ChatType;
 }

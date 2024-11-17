@@ -1,4 +1,4 @@
-export enum ChatTypes {
+export enum ChatType {
   text = "text",
   voice = "voice",
 }

@@ -16,7 +16,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   getListRef,
   scrollToBottom,
 }) => {
-  useMessages();
+  const { isFetching } = useMessages();
 
   const firstRender = useRef(true);
 
@@ -48,9 +48,14 @@ export const MessageList: React.FC<MessageListProps> = ({
         getListRef(ref);
       }}
     >
-      {formattedMessages.map((message) => (
-        <MessageItem key={message.id} data={message} avatar={message.avatar} />
-      ))}
+      {!isFetching &&
+        formattedMessages.map((message) => (
+          <MessageItem
+            key={message.id}
+            data={message}
+            avatar={message.avatar}
+          />
+        ))}
       <div id="anchor"></div>
     </List>
   );

@@ -12,14 +12,22 @@ export const useMessages = () => {
 
   const { page, size } = usePagination();
 
-  const { data, isLoading, isFetching, isSuccess } = useGetMessagesQuery({
-    page,
-    size,
-    chatId,
-  });
+  const { data, isLoading, isFetching, isSuccess } = useGetMessagesQuery(
+    {
+      page,
+      size,
+      chatId: chatId as number,
+    },
+    { skip: chatId === null }
+  );
 
   useEffect(() => {
-    if (isSuccess) {
+    if (chatId === null) {
+      dispatch(setMessages([]));
+      return;
+    }
+
+    if (isSuccess && !isFetching) {
       dispatch(
         setMessages([
           ...data,
